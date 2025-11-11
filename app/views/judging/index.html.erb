@@ -1,0 +1,92 @@
+<div class="row align-items-center">
+
+  <div class="page-header col-sm-4">
+    <h1 class="page-title">Judging</h1>
+  </div>
+
+  <!-- Judging Administration Button Strip -->
+  <% if current_user.is_admin? or current_user.is_organizer? %>
+    <div class="col-12 text-left">
+      <div class="card text-center">
+        <div class="card-body text-left">
+          <div class="h4 mb-4"> Judging Administration</div>
+
+          <div class="btn-group" role="group" aria-label="Button group">
+            <%= link_to "Assign by Prize", tag_assign_judging_index_path, class: 'btn btn-secondary' %>
+            <%= link_to "Mass Assignment", judge_mass_assign_judging_index_path, class: 'btn btn-secondary' %>
+          </div>
+
+          <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="assignDrop" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Project Tables
+            </button>
+            <div class="dropdown-menu" aria-labelledby="assignDrop">
+              <%= link_to "Assign Table Numbers", judging_assign_tables_path, class: 'dropdown-item', method: :post %>
+              <%= link_to "Unassign Table Numbers", judging_unassign_tables_path, class: 'dropdown-item', method: :post %>
+            </div>
+          </div>
+          <%= link_to "Paper Judging", paper_judging_path, class: 'btn btn-secondary btn-md' %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+
+  <div class="card">
+    <div class="card-body">
+      <nav class="nav nav-pills nav-fill align-items-center" id="pills-tab">
+
+        <!-- Display all projects to admin/organizer only -->
+        <% if current_user.is_admin? or current_user.is_organizer? %>
+          <a class="nav-item nav-link active pt-2 pb-2 h4" id="all-projects-tab" data-toggle="pill" href="#all-projects" role="tab" aria-controls="all-projects" aria-selected="true">All
+            Projects</a>
+          <a class="nav-item nav-link pt-2 pb-2 h4" id="assigned-to-me-tab" data-toggle="pill" href="#assigned-to-me" role="tab" aria-controls="assigned-to-me" aria-selected="false">Assigned
+            to Me</a>
+          <a class="nav-item nav-link pt-2 pb-2 h4" id="judged-by-me-tab" data-toggle="pill" href="#judged-by-me" role="tab" aria-controls="judged-by-me" aria-selected="false">Judged
+            by Me</a>
+
+        <% else %>
+          <a class="nav-item nav-link pt-2 pb-2 h4 active" id="assigned-to-me-tab" data-toggle="pill" href="#assigned-to-me" role="tab" aria-controls="assigned-to-me" aria-selected="false">Assigned
+            to Me</a>
+          <a class="nav-item nav-link pt-2 pb-2 h4" id="judged-by-me-tab" data-toggle="pill" href="#judged-by-me" role="tab" aria-controls="judged-by-me" aria-selected="false">Judged
+            by Me</a>
+        <% end %>
+
+
+      </nav>
+
+      <hr>
+
+      <div class="tab-content" id="project-select">
+
+        <!-- Display all projects to admin/organizer only -->
+        <% if current_user.is_admin? or current_user.is_organizer? %>
+          <div class="tab-pane fade show active" id="all-projects" role="tabpanel" aria-labelledby="all-projects-tab">
+            <%= render 'all_projects' %>
+          </div>
+          <div class="tab-pane fade" id="assigned-to-me" role="tabpanel" aria-labelledby="assigned-to-me-tab">
+            <%= render 'assigned_projects' %>
+          </div>
+
+          <div class="tab-pane fade" id="judged-by-me" role="tabpanel" aria-labelledby="judged-by-me-tab">
+            <!--  Show All Projects Judged by Current User  -->
+            <%= render 'judged_projects' %>
+          </div>
+        <% else %>
+          <div class="tab-pane fade show active" id="assigned-to-me" role="tabpanel" aria-labelledby="assigned-to-me-tab">
+            <%= render 'assigned_projects' %>
+          </div>
+
+          <div class="tab-pane fade" id="judged-by-me" role="tabpanel" aria-labelledby="judged-by-me-tab">
+            <!--  Show All Projects Judged by Current User  -->
+            <%= render 'judged_projects' %>
+          </div>
+
+        <% end %>
+
+
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,349 @@
+<%
+=begin%>
+  This allows an organizer or admin to sort through applicants with a previous and next applicant button and accept or deny or etc an applicant.
+  It includes all the information listed about an applicant and gives an error if the resume file doesnt load.
+<%
+=end%>
+<title><%= @applicant.name %></title>
+
+<script>
+document.addEventListener('turbolinks:before-visit', function(e) {
+  var parser = document.createElement('a');
+  parser.href = e.data.url;
+
+  if(parser.host == window.location.host && parser.pathname == window.location.pathname) {
+    e.preventDefault();
+    window.location.href = e.data.url;
+  }
+});
+</script>
+<style>
+      .event-application-td {
+        text-align: right
+      }
+      .event-application-name {
+        width: 300px
+      }
+      .event-application-col-height {
+        height: 50px;
+      }
+      .eventapp-edit-button {
+        margin-top: 10px;
+      }
+      .eventapp-user-heading {
+        display: inline-block;
+      }
+      .main-div-pad {
+        padding-top: 0px;
+      }
+      .event-application-resume-container {
+        display:flex;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height:600px;
+      }
+</style>
+<div class="main-div-pad">
+  <div class="container">
+    <div class="row">
+        <div class="row align-items-center event-application-nav-button-container">
+          <div class="dropdown">
+            <% EventApplication.where("id < ?", @applicant.id).any? && if admin_or_organizer?%>
+            <button class="btn btn-purple event-application-nav-button dropdown-toggle" type="button" 
+              id="previousAppDropdownBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Previous Applicant
+            </button>
+            <div class="dropdown-menu" aria-labelledby="previousAppDropdownBtn">
+              <% [["undecided", "primary"], ["accepted", "success"], ["waitlisted", "warning"], ["denied", "danger"]].each do |status| %>
+                <% EventApplication.where("id < ?", @applicant.id).where(status: status[0]).any? && if admin_or_organizer? %>
+                  <div class="dropdown-item">
+                    <%= link_to "#{status[0].capitalize} Applicant",
+                                event_application_path(EventApplication.where("id < ?", @applicant.id).where(status: status[0]).first.id),
+                                class: "btn btn-#{status[1]}"
+                    %>
+                  </div>
+                <% end %>
+              <% end %>
+              <% EventApplication.where("id < ?", @applicant.id).where(flag: true).any? && if admin_or_organizer? %>
+                <div class='dropdown-item'>
+                  <%= link_to 'Flagged Applicant',
+                              event_application_path(EventApplication.where("id < ?", @applicant.id).where(flag: true).first.id),
+                              class: 'btn btn-danger'
+                  %>
+                </div>
+              <% end %>
+            </div>
+            <% end %>
+          </div>
+          <div>
+          <h2 class="eventapp-user-heading"> <center><%= @applicant.name %> </center></h2>
+          <% if @applicant.flag && admin_or_organizer? %>
+            <span class="tag tag-danger event-application-header-status-margin">
+              Flagged
+            </span>
+          <% end %>
+          <% if @applicant.user.rsvp %>
+            <span class="tag tag-success event-application-header-status-margin">
+            RSVP
+            </span>
+          <% end %>
+          <% if 'accepted'.eql?(@status) %>
+            <span class="tag tag-success event-application-header-status-margin">
+              <%= @status.capitalize %>
+            </span>
+          <% elsif 'denied'.eql?(@status) %>
+            <span class="tag tag-danger event-application-header-status-margin">
+              <%= @status.capitalize %>
+            </span>
+          <% elsif 'waitlisted'.eql?(@status) %>
+            <span class="tag tag-warning event-application-header-status-margin">
+              <%= @status.capitalize %>
+            </span>
+          <% else %>
+            <span class="tag tag-secondary event-application-header-status-margin">
+              <%= @status.capitalize %>
+            </span>
+          <% end %>
+          </div>
+          <div class="dropdown">
+            <% EventApplication.where("id > ?", @applicant.id).any? && if admin_or_organizer?%>
+            <button class="btn btn-purple event-application-nav-button dropdown-toggle" type="button" 
+              id="nextAppDropdownBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Next Applicant
+            </button>
+            <div class="dropdown-menu" aria-labelledby="nextAppDropdownBtn">
+              <% [["undecided", "primary"], ["accepted", "success"], ["waitlisted", "warning"], ["denied", "danger"]].each do |status| %>
+                <% EventApplication.where("id > ?", @applicant.id).where(status: status[0]).any? && if admin_or_organizer? %>
+                  <div class="dropdown-item">
+                    <%= link_to "#{status[0].capitalize} Applicant",
+                                event_application_path(EventApplication.where("id > ?", @applicant.id).where(status: status[0]).first.id),
+                                class: "btn btn-#{status[1]}"
+                    %>
+                  </div>
+                <% end %>
+              <% end %>
+              <% EventApplication.where("id > ?", @applicant.id).where(flag: true).any? && if admin_or_organizer? %>
+                <div class='dropdown-item'>
+                  <%= link_to 'Flagged Applicant',
+                              event_application_path(EventApplication.where("id > ?", @applicant.id).where(flag: true).first.id),
+                              class: 'btn btn-danger'
+                  %>
+                </div>
+              <% end %>
+            </div>
+            <% end %>
+          </div>
+        </div>
+
+
+
+      <div class="row">
+      <div class="col-md-6">
+      <div class="card">
+
+      <div class="card-header event-application-card-padding event-application-col-height">
+    <!-- Applicant's Status -->
+        <% if @applicant.flag && admin_or_organizer? || 'denied'.eql?(@status)  %>
+          <div class="card-status bg-danger"></div>
+        <% elsif 'accepted'.eql?(@status) %>
+          <div class="card-status bg-success"></div>
+        <% elsif 'waitlisted'.eql?(@status) %>
+          <div class="card-status bg-warning"></div>
+        <% else %>
+          <div class="card-status bg-secondary"></div>
+        <% end %>
+    <div class="event-application-nav-button-container">
+    <div>
+      <p><h3>Registration</h3>
+</div>
+        <%= button_to 'Edit', edit_event_application_path(@applicant),
+                        {method: 'get', class: 'btn btn-purple btn-sm event-application-status-button eventapp-edit-button'} %>
+      
+    </div>
+    
+        </div>
+        <div style="height:600px; overflow:auto;">
+        <div class="card-body event-application-card-padding">
+          <table style="width:100%">
+            <tr>
+              <td class="event-application-name"><label><b><center>Name: </center></b></label></td>
+              <td class="event-application-td"><%= @applicant.name %></td>
+            </tr>
+            
+            <tr>
+              <td class="event-application-name"><label><b><center>Email: </center></b></label></td>
+              <td class="event-application-td"><%= @user.email %></td>
+            </tr>
+
+            <tr>
+              <td class="event-application-name"><label><b><center>Phone: </center></b></label></td>
+              <td class="event-application-td"><%= @applicant.phone.empty? ? 'N/A' : @applicant.phone %></td>
+            </tr>
+
+            <tr>
+              <td class="event-application-name"><label><b><center>Gender: </center></b></label></td>
+              <td class="event-application-td"><%= @applicant.gender %></td>
+            </tr>
+
+            <tr>
+              <td class="event-application-name"><label><b><center>Education Level: </center></b></label></td>
+              <td class="event-application-td"><%= @applicant.education_lvl %></td>
+            </tr>
+
+            <tr>
+              <td class="event-application-name"><label><b><center>University: </center></b></label></td>
+              <td class="event-application-td"><%= @applicant.university %></td>
+            </tr>
+
+            <tr>
+              <td><label><b><center>Major: </center></b></label></td>
+              <td class="event-application-td"><%= @applicant.major %></td>
+            </tr>
+
+            <tr>
+              <td class="event-application-name"><label><b><center>Graduation Year: </center></b></label></td>
+              <td class="event-application-td"><%= @applicant.grad_year %></td>
+            </tr>
+
+            <tr>
+              <td class="event-application-name"><label><b>Food Restrictions: </b></label></td>
+              <td class="event-application-td"><%= @applicant.food_restrictions %></td>
+            </tr>
+
+            <tr>
+              <td class="event-application-name"><label><b><center>T-Shirt Size: </center></b></label></td>
+              <td class="event-application-td"><%= @applicant.t_shirt_size %></td>
+            </tr>
+
+           <% HackumassWeb::Application::EVENT_APPLICATION_CUSTOM_FIELDS.each do |c| %>
+            <tr>
+            <td class="event-application-name"><label title="<%= c['name'] %>"><b><%= c['label'].truncate(50) %>: </b></label></td>
+            <td class="event-application-td"><%= @applicant.custom_fields[c['name']] %></td>
+            </tr>
+          <% end %>
+          </table>
+
+
+
+        <% if CustomRsvp.where(user_id: @applicant.user_id).exists? %>
+          <% @rsvp = CustomRsvp.where(user_id: @applicant.user_id).first %>
+          <% if @rsvp.answers %>
+            <hr />
+            <h3>Custom RSVP Questions:</h3>
+            <table>
+            <% HackumassWeb::Application::RSVP_CUSTOM_FIELDS.each do |c| %>
+              <p class='required-field'>
+              <tr>
+             <td class="event-application-name"><label title="<%= c['name'] %>"><b><%= c['label'].truncate(50) %>: </b></label></td>
+              <td class="event-application-td"><%= @rsvp.answers[c['name']] %></td>
+              </tr>
+              </p>
+            <% end %>
+            </table>
+          <% end %>
+        <% end %>
+
+        </div>
+
+
+        <% if admin_or_organizer? %>
+          <!--
+            Only show this field when the applicants disagrees to the
+            Term & Conditions but the form is somehow still submitted
+          -->
+          <% unless @applicant.waiver_liability_agreement and @applicant.mlh_agreement %>
+            <p class='required-field'> # Display HackUMass Terms Status
+            <span class='event-application-error-text'>
+              <label><b>Terms & Condition: </b></label>
+              <%= @applicant.waiver_liability_agreement ? 'AGREED' : 'DISAGREED' %>
+            </span>
+            </p>
+
+            <p class='required-field'> # Display MLH Terms Status
+            <span class='event-application-error-text'>
+              <label><b>Terms & Condition: </b></label>
+              <%= @applicant.mlh_agreement ? 'AGREED' : 'DISAGREED' %>
+            </span>
+            </p>
+          <% end %>
+        <% end %>
+       
+      </div>
+      
+      </div>
+      
+      </div>
+      <div class="col-md-6">
+      <div class="card">
+    <!-- Applicant's Status -->
+        <% if @applicant.flag && admin_or_organizer? || 'denied'.eql?(@status)  %>
+          <div class="card-status bg-danger"></div>
+        <% elsif 'accepted'.eql?(@status) %>
+          <div class="card-status bg-success"></div>
+        <% elsif 'waitlisted'.eql?(@status) %>
+          <div class="card-status bg-warning"></div>
+        <% else %>
+          <div class="card-status bg-secondary"></div>
+        <% end %>
+      
+      <div class="event-application-flex-mid-container test">
+          <% if admin_or_organizer? %>
+            <% if @applicant.resume_content_type and @applicant.resume and @applicant.resume.url %>
+            <a href="<%= @applicant.resume.url %>" class="btn btn-secondary btn-sm event-application-status-button" style="width: auto;padding-top: 9px;">
+              Resume Link
+            </a>
+            <% end %>
+            <%= button_to 'Accept',
+                          {controller: 'event_applications', action: 'status_updated',
+                           params: {new_status: 'accepted', id: @applicant.user_id}},
+                          {class: 'btn btn-success btn-sm event-application-status-button'} %>
+
+            <%= button_to 'Deny',
+                          {controller: 'event_applications', action: 'status_updated',
+                           params: {new_status: 'denied', id: @applicant.user_id}},
+                          {class: 'btn btn-danger btn-sm event-application-status-button'} %>
+
+            <%= button_to 'Waitlist',
+                          {controller: 'event_applications', action: 'status_updated',
+                           params: {new_status: 'waitlisted', id: @applicant.user_id}},
+                          {class: 'btn btn-warning btn-sm event-application-status-button'} %>
+            <% if @application.flag %>
+              <%= button_to 'Unflag',
+                            {controller: 'event_applications', action: 'unflag_application',
+                             params: {application: @application}},
+                            {class: 'btn btn-secondary btn-sm event-application-status-button'} %>
+            <% else %>
+              <%= button_to 'Flag',
+                            {controller: 'event_applications', action: 'flag_application',
+                             params: {application: @application}},
+                            {class: 'btn btn-secondary btn-sm event-application-status-button'} %>
+            <% end %>
+          <% end %>
+      
+
+        </div>
+
+
+      <div class="event-application-resume-container">
+        <% if @applicant.resume_content_type and @applicant.resume and @applicant.resume.url %>
+          <object width="100%" height="600px" type='application/pdf' data="<%= @applicant.resume.url %>">
+            <iframe src="<%= @applicant.resume.url %>" width="100%" height="600px">
+              <p>There was error loading the resume, try refreshing the page to see if the
+                problem will be resolved. If the issue persists, contact the tech team.</p>
+            </iframe>
+          </object>
+        <% else %>
+          <div class="event-application-resume-container">
+              <b style="color: red">No resume was uploaded.</b>
+          </div>
+        <% end %>
+      </div>
+      
+      </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>

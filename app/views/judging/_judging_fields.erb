@@ -1,0 +1,303 @@
+<style>
+input[type='range'] {
+    -webkit-tap-highlight-color: transparent;
+    position: relative;
+    height: unset;
+    min-height: unset;
+    height: 2em;
+    zoom: 2;
+}
+
+@media (max-width: 800px) {
+    input[type='range'] {
+        zoom: 3;
+    }
+}
+</style>
+
+<%= form_for(@judgement, html: {multipart: true}) do |f| %>
+    <% if (current_user.is_admin? or current_user.is_organizer?) and (params[:tag].nil? or params[:tag] == '') %>
+        <div class="row mt-5 mb-5">
+            <div class="col form-group">
+                <b><%= f.label :tag, 'Describe this judgement with a tag. (optional)' %></b>
+                <%= f.text_field :tag, class: 'form-control', required: false, placeholder: 'Tag', value: params[:tag], data: {autocomplete: autocomplete_prize_name_judging_index_path}  %>
+            </div>
+        </div>
+        <hr>
+    <% else %>
+        <%= f.hidden_field :tag, value: params[:tag] %>        
+    <% end %>
+    <% HackumassWeb::Application::JUDGING_CUSTOM_FIELDS.each do |c| %>
+        <%= f.hidden_field :project_id, value: @project_id %>
+        <%= f.fields_for :custom_scores, OpenStruct.new(@judgement.custom_scores) do |o| %>
+            <div class="col-md-8">
+                <h2 class="leading-loose d-inline"> <%= c['name'].titleize %>: </h2><br>
+                <p class="leading-wide d-inline"> <%= o.label c['name'].to_sym, "#{c['label']}:" %> </p>
+            </div>
+            <br />
+            <% if c['type'] == 'button' %>
+                <div class="row row-cards row-deck">
+                    <% c['scores'].each do |cate| %>
+                        <div class="col-md-3 judge_button_style">
+                        <label id="<%= c['name'] %>_check%" class="card">
+                            <%= o.radio_button c['name'].to_sym, "#{cate['points']}", {class: 'form-control custom-select card-input-element d-none hidden'} %>                          
+                            <div class="judge_button">
+                                <div class="card-body text-center">
+                                <div class="display-4 my-3"> <%= cate['points'] %><h5 class="d-inline">pts.</h5> </div>
+                                <%= cate['description'] %>
+                            </div>
+                            </div>
+                        </label>
+                        </div>
+                    <% end %>
+                </div>
+            <% elsif c['type'] == 'range' %>
+                <div class="row justify-content-center">
+                    <div class="col-md-3">
+                        <h6 class="mb-2"> Current Rating: </h6> <div class="text-center"><output id="<%= c['name'] %>_value" class="display-4 my-2" > <%= (c['scores'][-1]['points'] / 2).floor %> </output>pts. </div>
+                    </div>
+                    <div class="col-md-7">
+                        <h6> Description: </h6> <output id="<%= c['name'] %>_desc" >Please slide to an appropriate value </output>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-md-10">
+                        <%= o.range_field c['name'].to_sym, :min=>"0",
+                        :max=>c['scores'][-1]['points'], :height=>"2em", :class=>"custom-range", :step=>"1", :id=>"#{c['name']}_slider",
+                        :oninput=>"changeSliderOutput(#{c['name']}_value, #{c['name']}_desc, #{c['name']}_slider, #{c['scores'].to_json})" %>
+                    </div>
+                </div>
+                <% if @editing %>
+                    <script>
+                    $(function() {
+                        document.querySelector("#<%=c['name']%>_slider").oninput();
+                    });
+                    </script>
+                <% end %>
+            <% elsif c['type'] == 'range_restricted' %>
+                <div class="row justify-content-center">
+                    <div class="col-md-3">
+                        <h6 class="mb-2"> Current Rating: </h6> <div class="text-center"><output id="<%= c['name'] %>_value" class="display-4 my-2" > <%= (c['scores'][-1]['points'] / 2).floor %> </output>pts. </div>
+                    </div>
+                    <div class="col-md-7">
+                        <h6> Description: </h6> <output id="<%= c['name'] %>_desc" >Please slide to an appropriate value </output>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-md-10">
+                        <%= o.range_field c['name'].to_sym, :min=>"0",
+                        :max=>c['scores'][-1]['points'], :class=>"custom-range", :step=>c['step'], :id=>"#{c['name']}_slider",
+                        :oninput=>"changeSliderOutput(#{c['name']}_value, #{c['name']}_desc, #{c['name']}_slider, #{c['scores'].to_json})" %>
+                    </div>
+                </div>
+                <% if @editing %>
+                    <script>
+                    $(function() {
+                        document.querySelector("#<%=c['name']%>_slider").oninput();
+                    });
+                    </script>
+                <% end %>
+            <% elsif c['type'] == 'dropdown' %>
+                <%= o.select c['name'].to_sym, c['scores'].map{|item| [item['description'], item['points']]}, {include_blank: "Select an option below"}, {class: 'form-control custom-select'} %>                
+            <% elsif c['type'] == 'text' %>
+                <%= o.text c['name'].to_sym, {class: 'form-control'} %>
+            <% elsif c['type'] == 'textarea' %>
+                <%= o.text_area c['name'].to_sym, {class: 'form-control'} %> 
+                <% if not @editing %>
+                    <script>
+                        $(function() {
+                            var el = document.querySelector("#judgement_custom_scores_<%=c['name']%>");
+                            if (el.value.length == 0)
+                                el.value = " ";
+                        })
+                    </script>
+                <% end %>               
+            <% end %>
+        <% end %>
+    <% end %>
+
+    <div class="">
+    <br>
+    <% if @editing %>
+        <%= f.submit 'Update Judgment', type: 'submit', class: 'float-right btn btn-primary bg-primary-color' %>
+    <% else %>
+        <%= f.submit 'Submit Judgment', type: 'submit', class: 'float-right btn btn-primary bg-primary-color' %>
+    <% end %>
+    </div>
+<% end %> 
+
+<script>
+;(function($){
+  var touch = {},
+    touchTimeout, tapTimeout, swipeTimeout, longTapTimeout,
+    longTapDelay = 750, gesture;
+
+  function swipeDirection(x1, x2, y1, y2) {
+    return Math.abs(x1 - x2) >=
+      Math.abs(y1 - y2) ? (x1 - x2 > 0 ? 'Left' : 'Right') : (y1 - y2 > 0 ? 'Up' : 'Down')
+  }
+
+  function longTap() {
+    longTapTimeout = null
+    if (touch.last) {
+      touch.el.trigger('longTap')
+      touch = {}
+    }
+  }
+
+  function cancelLongTap() {
+    if (longTapTimeout) clearTimeout(longTapTimeout)
+    longTapTimeout = null
+  }
+
+  function cancelAll() {
+    if (touchTimeout) clearTimeout(touchTimeout)
+    if (tapTimeout) clearTimeout(tapTimeout)
+    if (swipeTimeout) clearTimeout(swipeTimeout)
+    if (longTapTimeout) clearTimeout(longTapTimeout)
+    touchTimeout = tapTimeout = swipeTimeout = longTapTimeout = null
+    touch = {}
+  }
+
+  function isPrimaryTouch(event){
+    return (event.pointerType == 'touch' ||
+      event.pointerType == event.MSPOINTER_TYPE_TOUCH)
+      && event.isPrimary
+  }
+
+  function isPointerEventType(e, type){
+    return (e.type == 'pointer'+type ||
+      e.type.toLowerCase() == 'mspointer'+type)
+  }
+
+  function extractTouchesFromEvent(e) {
+    return (e.touches || e.originalEvent.touches)
+  }
+
+      var readyFunc = function(){
+    var now, delta, deltaX = 0, deltaY = 0, firstTouch, _isPointerType
+
+    if ('MSGesture' in window) {
+      gesture = new MSGesture()
+      gesture.target = document.body
+    }
+
+    $(document)
+      .bind('MSGestureEnd', function(e){
+        var swipeDirectionFromVelocity =
+          e.velocityX > 1 ? 'Right' : e.velocityX < -1 ? 'Left' : e.velocityY > 1 ? 'Down' : e.velocityY < -1 ? 'Up' : null;
+        if (swipeDirectionFromVelocity) {
+          touch.el.trigger('swipe')
+          touch.el.trigger('swipe'+ swipeDirectionFromVelocity)
+        }
+      })
+      .on('touchstart MSPointerDown pointerdown', function(e){
+        if((_isPointerType = isPointerEventType(e, 'down')) &&
+          !isPrimaryTouch(e)) return
+
+        var touchList = extractTouchesFromEvent(e)
+
+        firstTouch = _isPointerType ? e : touchList[0]
+        if (touchList && touchList.length === 1 && touch.x2) {
+          // Clear out touch movement data if we have it sticking around
+          // This can occur if touchcancel doesn't fire due to preventDefault, etc.
+          touch.x2 = undefined
+          touch.y2 = undefined
+        }
+        now = Date.now()
+        delta = now - (touch.last || now)
+        touch.el = $('tagName' in firstTouch.target ?
+          firstTouch.target : firstTouch.target.parentNode)
+        touchTimeout && clearTimeout(touchTimeout)
+        touch.x1 = firstTouch.pageX
+        touch.y1 = firstTouch.pageY
+        if (delta > 0 && delta <= 250) touch.isDoubleTap = true
+        touch.last = now
+        longTapTimeout = setTimeout(longTap, longTapDelay)
+        // adds the current touch contact for IE gesture recognition
+        if (gesture && _isPointerType) gesture.addPointer(e.pointerId);
+      })
+      .on('touchmove MSPointerMove pointermove', function(e){
+        if((_isPointerType = isPointerEventType(e, 'move')) &&
+          !isPrimaryTouch(e)) return
+
+        var touchList = extractTouchesFromEvent(e)
+
+        firstTouch = _isPointerType ? e : touchList[0]
+        cancelLongTap()
+        touch.x2 = firstTouch.pageX
+        touch.y2 = firstTouch.pageY
+
+        deltaX += Math.abs(touch.x1 - touch.x2)
+        deltaY += Math.abs(touch.y1 - touch.y2)
+      })
+      .on('touchend MSPointerUp pointerup', function(e){
+        if((_isPointerType = isPointerEventType(e, 'up')) &&
+          !isPrimaryTouch(e)) return
+        cancelLongTap()
+
+        // swipe
+        if ((touch.x2 && Math.abs(touch.x1 - touch.x2) > 30) ||
+            (touch.y2 && Math.abs(touch.y1 - touch.y2) > 30))
+
+          swipeTimeout = setTimeout(function() {
+            touch.el.trigger('swipe')
+            touch.el.trigger('swipe' + (swipeDirection(touch.x1, touch.x2, touch.y1, touch.y2)))
+            touch = {}
+          }, 0)
+
+        // normal tap
+        else if ('last' in touch)
+          // don't fire tap when delta position changed by more than 30 pixels,
+          // for instance when moving to a point and back to origin
+          if (deltaX < 30 && deltaY < 30) {
+            // delay by one tick so we can cancel the 'tap' event if 'scroll' fires
+            // ('tap' fires before 'scroll')
+            tapTimeout = setTimeout(function() {
+
+              // trigger universal 'tap' with the option to cancelTouch()
+              // (cancelTouch cancels processing of single vs double taps for faster 'tap' response)
+              var event = $.Event('tap')
+              event.cancelTouch = cancelAll
+              touch.el.trigger(event)
+
+              // trigger double tap immediately
+              if (touch.isDoubleTap) {
+                if (touch.el) touch.el.trigger('doubleTap')
+                touch = {}
+              }
+
+              // trigger single tap after 250ms of inactivity
+              else {
+                touchTimeout = setTimeout(function(){
+                  touchTimeout = null
+                  if (touch.el) touch.el.trigger('singleTap')
+                  touch = {}
+                }, 250)
+              }
+            }, 0)
+          } else {
+            touch = {}
+          }
+          deltaX = deltaY = 0
+
+      })
+      // when the browser window loses focus,
+      // for example when a modal dialog is shown,
+      // cancel all ongoing events
+      .on('touchcancel MSPointerCancel pointercancel', cancelAll)
+
+    // scrolling the window indicates intention of the user
+    // to scroll, not tap or swipe, so cancel all ongoing events
+    $(window).on('scroll', cancelAll)
+  };
+
+  $(document).on('turbolinks:load', readyFunc);
+  $(document).ready(readyFunc);
+
+  ;['swipe', 'swipeLeft', 'swipeRight', 'swipeUp', 'swipeDown',
+    'doubleTap', 'tap', 'singleTap', 'longTap'].forEach(function(eventName){
+    $.fn[eventName] = function(callback){ return this.on(eventName, callback) }
+  })
+})(window.$) // based on: https://raw.github.com/madrobby/zepto/master/src/touch.js
+</script>

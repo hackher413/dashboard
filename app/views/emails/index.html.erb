@@ -1,0 +1,45 @@
+<div class="page-header">
+  <h1 class="page-title">Mailing</h1>
+</div>
+
+
+
+<% if @emails.empty? %>
+  <h4>There aren't any emails... Yet.</h4></center>
+<% else %>
+  <div class="col-12">
+    <div class="card">
+      <div class="table-responsive">
+        <table class="table table-hover table-outline table-vcenter text-nowrap card-table">
+          <thead>
+            <tr>
+              <th>Subject</th>
+              <th>Message</th>
+              <th>Mailing List</th>
+              <th>Status</th>
+              <th>Sent by</th>
+              <th>Created at</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @emails.each do |email| %>
+              <tr>
+                <td><%= link_to email.subject, email %></td>
+                <td><%= truncate(email.message , length: 30)%></td>
+                <td><%= email.mailing_list %></td>
+                <td><%= email.status %></td>
+                <td><%= email.sent_by %></td>
+                <td><%= email.created_at.strftime('%A, %b %d at %I:%M %p') %></td>
+              </tr>
+            <% end %>
+          </tbody>
+
+        </table>
+      </div>
+    </div>
+  </div>
+
+<% end %>
+<br>
+<%= link_to 'Return to Admin Page', admin_path, class: 'btn btn-secondary'%>
+<%= link_to 'Create New Email', new_email_path, class: 'btn btn-primary' %>

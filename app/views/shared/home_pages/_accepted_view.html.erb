@@ -1,0 +1,70 @@
+
+<% if @rsvp.errors.any? %>
+  <div class="row">
+    <div class="col-sm-12 col-lg-12">
+      <div class="card">
+        <div class="card-status bg-danger"></div>
+        <div class="card-header">
+          <h3 class="page-title">
+              <%=pluralize(@rsvp.errors.count, 'error') %> prohibited your RSVP from being saved:
+          </h3>
+        </div>
+        <div class="card-body event-application-error-card-padding">
+          <ul>
+            <% @rsvp.errors.values.each do |message| %>
+              <li>
+                <%= message.to_s.gsub(%r{[\[\]"]}, '').gsub(%r{\\n}, '') %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+<div class="row">
+  <div class="col-sm-12 col-lg-8">
+    <div class="card">
+      <div class="card-status bg-success"></div>
+      <div class="card-header">
+        <h3 class="card-title">Congratulations!👏</h3>
+      </div>
+      <div class="card-body d-flex flex-column">
+        <%= render file: HackumassWeb::Application::copy_for('shared/home_pages/accepted_view_rsvp') %>
+        <% if @rsvp_new %>
+          <div class="alert alert-danger">
+              You haven't yet RSVP'd. You can do so below.
+          </div>
+        <% elsif @current_user.rsvp %>
+          <div class="alert alert-success">
+              You have already RSVP'd! You can update your RSVP below.<br />
+              <b>If you are unable to attend, please click "Sorry, I can't participate"</b>
+          </div>
+        <% end %>
+        <%= render "custom_rsvp/form" %>
+        </div>
+    </div>
+  </div>
+
+  <div class="col-sm-12 col-lg-4">
+    <div class="card">
+      <div class="card-status bg-purple"></div>
+      <div class="card-header">
+        <h3 class="card-title">Traveling 🚌</h3>
+      </div>
+      <div class="card-body d-flex flex-column">
+        <%= render file: HackumassWeb::Application::copy_for('shared/home_pages/accepted_view_traveling') %>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-status bg-blue"></div>
+      <div class="card-header">
+        <h3 class="card-title">Getting to the Hackathon 🚶‍</h3>
+      </div>
+      <div class="card-body d-flex flex-column">
+        <%= render file: HackumassWeb::Application::copy_for('shared/home_pages/accepted_view_location') %>
+      </div>
+    </div>
+  </div>
+</div>

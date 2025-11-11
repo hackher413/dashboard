@@ -1,0 +1,45 @@
+name: HackHer413
+version: 2025 # Could also be a roman numeral or other number, will be concatenated with the hackathon name where necessary
+main_website: https://www.hackher413.com/
+dashboard_url: https://dashboard.hackher413.com
+logos:
+    primary_path: https://www.hackher413.com/assets/images/2025_logo/2025_black%20_logo.png
+    nav_path: HackHer2025.png
+    favicon_url: bee.png
+emails:
+    contact: hackher413@gmail.com
+    noreply: noreply@hackher413.com
+    email_verification: false
+slack:
+    enabled: false
+    # subdomain: hackher413-2024
+discord:
+  enabled: true
+  server_id: 1309430465450606592
+  teamforming_channel_id: 1326303382050443354
+  ask_mentor_channel_id: 1326306268410941532
+  general_channel_id: 1309430467203698741
+  invite_url: https://discord.gg/kYP6JVtz
+applications:
+    mode: "open"
+    # options: open, waitlist, or closed. defaults to closed.
+    # The applications are still not opened unless the applications feature
+    # flag is enabled.
+checkin:
+    # Any participant with this email domain will be counted as from the host university
+    university_email_suffix: umass.edu
+    university_name: UMass
+    university_name_checks:
+        - University of Massachusetts Amherst
+        - UMass Amherst
+        - UMass-Amherst
+        - UMass at Amherst
+        - UMass, Amherst
+projects:
+    public: true
+    hacking_begins: "Feb 15, 2025 10:00:00"
+    hacking_ends: "Feb 16, 2025 10:00:00"
+# List all codes here which can be redeemed on Dashboard to grant permissions
+# This is useful for judges and mentors who show up to the event and need an account
+# with more permissions, and can save time and effort of an organizer
+# Format is code:role granted

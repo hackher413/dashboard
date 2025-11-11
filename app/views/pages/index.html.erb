@@ -1,0 +1,38 @@
+<div class="container">
+  <div class="page-header">
+    <h1 class="page-title"> Home</h1>
+  </div>
+
+  <% if current_user.is_admin? %>
+    <%= render 'shared/home_pages/admin_view'%>
+  <% elsif current_user.is_organizer? %>
+    <%= render 'shared/home_pages/organizer_view'%>
+  <% elsif current_user.is_mentor? %>
+    <%= render 'shared/home_pages/mentor_view'%>
+  <% elsif current_user.check_in %>
+    <%= render 'shared/home_pages/checked_in_view'%>
+  <% else %>
+    <% if current_user.has_applied? %>
+      <% if current_user.event_application.status == 'undecided' %>
+          <%= render 'shared/home_pages/undecided_view'%>
+      <% elsif current_user.event_application.status == 'accepted' %>
+        <% if current_user.rsvp %>
+          <% if current_user.check_in %>
+            <%= render 'shared/home_pages/checked_in_view'%>
+          <% else %>
+            <%= render 'shared/home_pages/rsvp_view'%>
+          <% end %>
+        <% else %>
+          <%= render 'shared/home_pages/accepted_view'%>
+        <% end %>
+      <% elsif current_user.event_application.status == 'waitlisted' %>
+          <%= render 'shared/home_pages/waitlisted_view'%>
+      <% elsif current_user.event_application.status == 'denied' %>
+          <%= render 'shared/home_pages/denied_view'%>
+      <% end %>
+    <% else %>
+      <%= render 'shared/home_pages/new_user_view'%>
+    <% end %>
+  <% end %>
+
+</div>

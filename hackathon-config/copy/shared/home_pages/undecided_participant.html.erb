@@ -1,0 +1,14 @@
+<h2>Hey, <%= current_user.first_name.capitalize %></h2>
+<div class="text-muted">Looks like we got your application. Yay🎉</div>
+<p>
+    <div class="text-muted">If there is anything you would like to change in your application, head out to My Application
+        and make all the edits you want. </div>
+</p>
+<div class="text-muted">We will let you know of your application status in a few weeks. Thanks for applying!</div>
+<div class="d-flex align-items-center pt-5 mt-auto">
+<% if HackumassWeb::Application::DISCORD_ENABLED %>
+        <%= render file: HackumassWeb::Application::copy_for('shared/home_pages/discord_channels') %>
+    <% elsif HackumassWeb::Application::SLACK_ENABLED%>
+        <%= render file: HackumassWeb::Application::copy_for('shared/home_pages/slack_channels') %>
+    <% end%>
+</div>

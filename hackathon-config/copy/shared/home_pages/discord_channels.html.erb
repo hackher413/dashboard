@@ -1,0 +1,31 @@
+<div class="card">
+    <div class="card-status bg-dark"></div>
+    <div class="card-header">
+        <h3 class="card-title">Discord Channels</h3>
+    </div>
+    <div class="card-body d-flex flex-column">
+        <p>
+            <div>Join the <%= HackumassWeb::Application::HACKATHON_NAME %> Discord server to connect with other participants, ask questions, and stay updated!</div>
+        </p>
+        <br>
+        <!-- General Channel -->
+        <a href="https://discord.com/channels/<%= HackumassWeb::Application::DISCORD_SERVER_ID %>/<%= HackumassWeb::Application::DISCORD_GENERAL_CHANNEL_ID %>" target="_blank" class="btn btn-dark">
+            <i class="fe fe-message-circle mr-2"></i>Go to #general channel
+        </a>
+        <br>
+        <!-- Team-Forming Channel -->
+        <a href="https://discord.com/channels/<%= HackumassWeb::Application::DISCORD_SERVER_ID %>/<%= HackumassWeb::Application::DISCORD_TEAMFORM_CHANNEL_ID %>" target="_blank" class="btn btn-dark">
+            <i class="fe fe-message-circle mr-2"></i>Go to #team-building channel
+        </a>
+        <br>
+        <!-- Ask a Mentor Channel -->
+        <a href="https://discord.com/channels/<%= HackumassWeb::Application::DISCORD_SERVER_ID %>/<%= HackumassWeb::Application::DISCORD_ASK_MENTOR_CHANNEL_ID %>" target="_blank" class="btn btn-dark">
+            <i class="fe fe-message-circle mr-2"></i>Go to #ask-a-mentor channel
+        </a>
+        <br>
+        <!-- Invite Link -->
+        <a href="<%= HackumassWeb::Application::DISCORD_INVITE_URL %>" target="_blank" class="btn btn-dark">
+            <i class="fe fe-link mr-2"></i>Join the Discord Server
+        </a>
+    </div>
+</div>

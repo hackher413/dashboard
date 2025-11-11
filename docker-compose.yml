@@ -1,0 +1,38 @@
+services:
+  postgres:
+    image: postgres:12
+    environment:
+      POSTGRES_USER: dashboard
+      POSTGRES_PASSWORD: dashboardpass
+      POSTGRES_DB: app_development
+    volumes:
+      - ./db/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dashboard"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "5432:5432"
+
+  rails:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./:/usr/src/app
+      - bundle_gems:/usr/src/app/vendor/bundle
+    environment:
+      RAILS_ENV: development
+      # Optional, Rails will typically pick up config/database.yml:
+      # DATABASE_URL: postgres://dashboard:dashboardpass@postgres:5432/app_development
+      # RAILS_LOG_TO_STDOUT: "1"
+      # RAILS_SERVE_STATIC_FILES: "1"
+
+volumes:
+  bundle_gems:

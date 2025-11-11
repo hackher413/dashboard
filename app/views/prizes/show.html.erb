@@ -1,0 +1,44 @@
+<div class="page-header">
+  <h1 class="page-title"><%= @prize.award %></h1>
+</div>
+
+<p id="notice"><%= notice %></p>
+
+<div class="col-lg-6">
+  <div class="card">
+    <div class="card-status bg-purple"></div>
+    <div class="card-header">
+      <h3 class="card-title">Prize Info</h3>
+    </div>
+    <div class="card-body">
+      <p>
+        <strong>Title:</strong>
+        <%= @prize.title %>
+      </p>
+
+      <p>
+        <strong>Description:</strong>
+        <%= @prize.description %>
+      </p>
+
+      <p>
+        <strong>Sponsor:</strong>
+        <%= @prize.sponsor %>
+      </p>
+
+      <p>
+        <strong>Priority:</strong>
+        <%= @prize.priority %>
+      </p>
+
+      <% if @prize.project_selectable %><b>You need to apply for this prize by selecting it on your project.</b><% end %>
+      
+      <%= link_to 'Edit', edit_prize_path(@prize), class: 'btn btn-warning' %>
+      <% if current_user.is_admin? %>
+        <%= link_to "Assign to Project", prize_assign_path(:prize_id => @prize.id), class: 'btn btn-primary' %>
+        <%= link_to 'Delete', prize_path(@prize), :method => :delete, class: 'btn btn-danger' %>
+      <% end %>
+    </div>
+  </div>
+</div>
+<%= link_to 'Go Back to Prizes', prizes_path, class: 'btn btn-secondary' %>

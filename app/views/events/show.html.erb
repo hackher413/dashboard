@@ -1,0 +1,85 @@
+<div class="page-header">
+  <h1 class="page-title"><%= @event.title %></h1>
+</div>
+<%= render 'event', event: @event, show_edit_and_delete: false%>
+<% if @event.rsvpable %>
+  <% if current_user.is_organizer? %>
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="page-header">
+            <h1 class="page-title"> Check In Attendees</h1>
+          </div>
+            <div class="card">
+            <div class="card-body">
+              <%= form_tag event_check_in_to_event_path(@event.id), method: :post, class:'col-lg-12' do%>
+                  <div class="input-group">
+                    <%= text_field_tag :email,'', class: 'form-control', placeholder: 'Scan QR Code or Type email', :autofocus => true, data: {autocomplete: autocomplete_user_email_pages_path}, 'min-length' => 1%>
+                    <span class="input-group-btn">
+                        <%= submit_tag 'Check In', class: 'btn btn-primary' %>
+                      </span>
+                  </div>
+                  <div class="input-group">
+                    <input type="checkbox" name="force_check_in" class="form-check-input" value="true" style="margin-left:10px;margin-top:8px;height:15px;width:15px" /><!--
+                    --><label for="force_check_in" style="margin-left:30px;margin-top:5px">Force check in, even if participant wasn't accepted or didn't apply</label>
+                  </div>
+              <%end%>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6 col-lg-6">
+              <div class="card p-3">
+                <div class="d-flex align-items-center">
+                  <span class="stamp stamp-md bg-green mr-3">
+                    <i class="fe fe-user-check"></i>
+                  </span>
+                  <div>
+                    <h4 class="m-0"><%= @check_in_count %></h4>
+                    <small class="text-muted">Check-In Attendees</small>
+                  </div>
+                </div>
+                <br>
+                <div>
+                  <ul>
+                    <% EventAttendance.where(event_id: @event.id).each do |atten|%>
+                      <% if atten.checked_in %>
+                        <li><%=atten.user.full_name%></li>
+                      <% end %>
+                    <% end %>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-lg-6">
+              <div class="card p-3">
+                <div class="d-flex align-items-center">
+                  <span class="stamp stamp-md bg-teal mr-3">
+                    <i class="fe fe-users"></i>
+                  </span>
+                  <div>
+                    <h4 class="m-0"><%= @rsvp_count %></h4>
+                    <small class="text-muted">RSVP'd Users</small>
+                  </div>
+                </div>
+                <br>
+                <div>
+                  <ul>
+                    <% @event.users.each do |u|%>
+                      <li><%=u.full_name%></li>
+                    <% end %>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+<% end %>
+<style>
+form.button_to { display: inline }
+</style>
+<div class="col-lg-6">
+  <%= link_to 'Go Back to Schedule', events_path, class: 'btn btn-secondary' %>
+</div>

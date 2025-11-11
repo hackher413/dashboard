@@ -1,0 +1,63 @@
+<div class="page-header">
+  <h1 class="page-title">Your Mentorship Requests</h1>
+</div>
+
+<% if @current_user.number_of_requests < 5 %>
+  <div class="row">
+    <div class="col-lg-4 offset-4">
+      <div class="card">
+        <%= render file: HackumassWeb::Application::copy_for('mentorship_requests/attendee_view_submit_request') %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+
+<% if @current_user.has_mentorship_requests? %>
+  <% if @current_user.number_of_requests > 2 and @current_user.number_of_requests < 5%>
+    <%= render file: HackumassWeb::Application::copy_for('mentorship_requests/attendee_view_remaining_requests') %>
+  <% elsif @current_user.number_of_requests == 5%>
+    <%= render file: HackumassWeb::Application::copy_for('mentorship_requests/attendee_view_max_requests') %>
+  <% end %>
+
+  <% @current_user.valid_requests.each do |mentorship_request|%>
+    <div class="card">
+      <h3 class="card-header">
+        <%= mentorship_request.title %>
+        <div style="margin-left: 2%;" class="badge badge-secondary"> Request ID: #<%= mentorship_request.id%> </div>
+      </h3>
+      <div class="card-body">
+        <h4>
+          <strong>Request Urgency:</strong>
+          <% if  mentorship_request.urgency == 0 %>
+            <span class="badge badge-info">Not Urgent</span>
+          <% elsif mentorship_request.urgency == 1 %>
+            <span class="badge badge-warning">Mildly Urgent</span>
+          <% elsif mentorship_request.urgency == 2 %>
+            <span class="badge badge-danger">Urgent</span>
+          <% elsif mentorship_request.urgency == 3 %>
+            <span class="badge badge-danger">Drastically Urgent</span>
+          <% end %>
+        </h4>
+        <h5 class="card-title"><%= mentorship_request.description%></h5>
+        <h5 class="card-title"><strong>Status:</strong>
+          <% if mentorship_request.status == 'Waiting' %>
+            <div class= "badge badge-warning">Waiting </div>
+          <% else %>
+            <div class= "badge badge-success"> Contacted </div>
+          <% end %>
+        </h5>
+        <p class="card-text">
+          <% mentorship_request.tech.each do |tech| %>
+            <div class="badge badge-secondary"> <%= tech %> </div>
+          <% end %>
+        </p>
+        <%= link_to 'Never mind, I figured it out!',
+                      {controller:'mentorship_requests', action: 'mark_as_resolved',
+                        params: {mentorship_request: mentorship_request}},
+                        class: "btn btn-secondary", role: "button", tag: "button", method: :put %>
+        <%= link_to 'Edit this request', edit_mentorship_request_path(mentorship_request), class: 'btn btn-secondary' %>
+      </div>
+    </div>
+  <% end %>
+<% end %>

@@ -1,0 +1,41 @@
+# Files in the config/locales directory are used for internationalization
+# and are automatically loaded by Rails. If you want to use locales other
+# than English, add the necessary files in this directory.
+#
+# To use the locales, use `I18n.t`:
+#
+#     I18n.t 'hello'
+#
+# In views, this is aliased to just `t`:
+#
+#     <%= t('hello') %>
+#
+# To use a different locale, set it with `I18n.locale`:
+#
+#     I18n.locale = :es
+#
+# This would use the information in config/locales/es.yml.
+#
+# To learn more, please read the Rails Internationalization guide
+# available at http://guides.rubyonrails.org/i18n.html.
+
+en:
+  activerecord:
+    attributes:
+      event_application:
+        name: "full name"
+        email: "email"
+        phone: "phone number"
+        age: "age"
+        gender: "gender"
+        university: "university"
+        major: "major"
+        grad_year: "graduation year"
+        food_restrictions: "Do you have any food allergies or dietary 
+        restrictions that we should know about?"
+        t_shirt_size: "t-shirt size"
+        resume: "resume"
+        prev_attendance: "Have you been to a hackathon before?"
+        referral_info: "How did you hear about hackumass?"
+        future_hardware_suggestion: "What hardware do you want to see at HackUMass VI or future HackUMass?"
+        education_lvl: "education level"

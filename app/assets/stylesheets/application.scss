@@ -1,0 +1,115 @@
+@import "tabler/variables";
+@import "bootstrap";
+@import "tabler";
+@import "tabler.plugins";
+@import 'https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css';
+@import 'event_application';
+@import 'judging';
+@import 'devise';
+
+
+$primary-color: #926dde;
+$error-color: red;
+
+* {
+ box-sizing: border-box;
+}
+
+*:before,
+*:after {
+ box-sizing: border-box;
+}
+
+html,
+body {
+ height: 100%;
+ position: relative;
+}
+.page-main {
+ min-height: 88vh; /* will cover the 100% of viewport */
+ overflow: hidden;
+ display: block;
+ position: relative;
+}
+
+footer {
+ bottom: 0;
+ width: 100%;
+}
+
+.label{
+  font-size: 100%;
+}
+
+.tag-event {
+  font-size: 80%;
+}
+
+.featured-event {
+  position: relative;
+}
+
+.featured-event .block-title {
+  /* Position & Box Model */
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  /* background */
+  background: rgba(0,0,0,0.7);
+  /* Width/Height */
+  padding: .5em;
+  width: 100%;
+  /* Text color */
+  color: #fff;
+}
+
+.featured-event .block-title h4 {
+  margin: 0;
+}
+
+.by-author {
+  margin-bottom: 0px;
+}
+
+.bg-primary-color {
+  background-color: $primary-color;
+}
+
+.field_with_errors{
+  display: inline;
+}
+
+.pagination {
+  display: block;
+}
+
+.prizes { /* Masonry container */
+    column-count: 3;
+    column-gap: 1em;
+}
+
+.prize-item { /* Masonry bricks or child elements */
+    display: inline-block;
+    margin: 0 0 1em;
+    width: 100%;
+}
+
+.footer .dashboard-logo {
+  padding-bottom: 2px;
+}
+
+.text-decoration-none {
+  text-decoration: none !important
+}
+
+.wrap-columns {
+  @media (min-width:34em) {
+    .card-deck > .card
+    {
+        width: 29%;
+        flex-wrap: wrap;
+        flex: initial; 
+    }
+}
+}

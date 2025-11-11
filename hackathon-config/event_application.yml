@@ -1,0 +1,248 @@
+options:
+  hide_event_toc: False
+  hide_mlh_toc: False
+  min_resume_age: 1000
+custom_fields:
+  - name: pronouns
+    label: "What are your preferred pronouns?"
+    required: False
+    type: multiselect
+    options:
+      - She/Her
+      - He/Him
+      - They/Them
+      - She/They
+      - He/They
+      - Other
+  - name: demographic_id
+    label: "Which of the following best describes you?"
+    required: False
+    type: multiselect
+    options:
+      - Asian Indian
+      - African
+      - Black
+      - Chinese
+      - Filipino
+      - Guamanian or Chamorro
+      - Hispanic/Latino/Spanish Origin
+      - Japanese
+      - Korean
+      - Middle Eastern
+      - Native American or Alaskan Native
+      - Native Hawaiian
+      - Samoan
+      - Vietnamese
+      - White
+      - Other Asian (Thai, Cambodian, etc.)
+      - Other Pacific Islanders
+      - Other
+  - name: demographic_sexuality_id
+    label: "Do you consider yourself to be any of the following?"
+    required: False
+    type: multiselect
+    options:
+      - Heterosexual/Straight
+      - Gay/Lesbian
+      - Bisexual
+      - Other
+  - name: country_residence
+    label: "What is your country of residence?"
+    required: True
+    type: multiselect
+    options:
+      - United States of America
+      - Canada
+      - Mexico
+      - China
+      - South Korea
+      - India
+      - Japan
+      - Pakistan
+      - Vietnam
+      - Kuwait
+      - United Arab Emarites
+      - Taiwan
+      - Iran
+      - Germany
+      - Columbia
+      - Other
+  - name: underrepresent
+    label: "Do you identify as part of an underrepresented group in the technology industry? "
+    required: False
+    type: select 
+    options:
+      - Yes, I identify as part of an underrepresented group in the technology industry.
+      - No, I do not identify as part of an underrepresented group in the technology industry. 
+      - Not Sure.
+  - name: meal_accommodation
+    label: "Would you require meal accommodations?"
+    type: select
+    required: True
+    options:
+      - Yes, I would require meal accommodations.
+      - No, I do not require meal accommodations.
+  - name: workshop_hosting
+    label: "Are you interested in hosting a workshop/talk?"
+    type: select
+    required: True
+    options:
+      - Yes, I am interested in hosting a workshop/talk.
+      - No, I am not interested in hosting a workshop/talk.
+  - name: workshop_topic
+    label: "If applicable, what is your workshop/talk about?"
+  - name: workshop_topic_slides
+    label: "If you have slides/materials ready for a workshop/talk, please link them here."
+  - name: hack_preference
+    label: "What technologies are you interested in?"
+    type: select
+    required: True
+    options:
+      - Front-end development
+      - Back-end development
+      - Full-stack development
+      - Mobile development
+      - Hardware engineering
+      - None, I am interested in something else
+  - name: vaccination_status
+    label: "Are you fully vaccinated for Covid-19?"
+    type: select
+    required: True
+    options:
+      - Yes, I am fully vaccinated with my primary series.
+      - No, I am not vaccinated with my primary series.
+  - name: linkedin_url
+    label: "LinkedIn URL"
+    validate_regex: '\A(https:\/\/)?(www.)?linkedin.com\/in\/\S+\z'
+    validate_error: "Your Linkedin URL is invalid. Example format: https://linkedin.com/in/yourprofile"
+  - name: github_url
+    label: "GitHub URL"
+    validate_regex: '\A(https:\/\/)?(www.)?github.com\/\S+\z'
+    validate_error: "Your Github URL is invalid. Example format: https://github.com/yourprofile"
+  - name: other_url
+    label: "Portfolio/Social Media Website URL"
+  - name: been_to_hackathon
+    label: "Have you been to a hackathon before?"
+    type: boolean
+    required: True
+    toggle_field: how_many_hackathons
+  - name: how_many_hackathons
+    label: "About how many hackathons have you attended?"
+    type: select
+    options:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5 or more
+    hidden: True
+  - name: been_to_hackumass
+    label: "Have you previously attended HackHer413?"
+    type: boolean
+    required: True
+    toggle_field: previous_hackumass_comments
+  - name: previous_hackumass_comments
+    label: "Since you've attended HackHer413 before, is there anything new or different you'd like to see at HackHer413 2024?"
+    type: textarea
+    max_chars: 500
+    hidden: True
+  - name: programming_skills
+    label: "Programming Skills (select all that apply, and if you don't know many that's okay!)"
+    type: multiselect
+    options:
+      - HTML/CSS
+      - Javascript/Node.js
+      - TypeScript
+      - PHP
+      - SQL
+      - Ruby
+      - Java
+      - Kotlin
+      - Swift
+      - Objective-C
+      - C/C++/C#
+      - Python
+      - Go
+      - Rust
+  - name: hardware_skills
+    label: "Hardware Skills (select all that apply)"
+    type: multiselect
+    options:
+      - Embedded Systems
+      - Robotics
+      - Wireless Communications
+      - Circuits
+      - 3D Printing
+  - name: other_skills
+    label: "If there are any other tech-related skills not listed above that you would like to share, list them below:"
+    type: textarea
+    max_chars: 500
+  - name: hardwawre
+    label: "Are you planning on using hardware?"
+    type: select
+    options: 
+      - Yes, I plan to use hardware.
+      - No, I do not plan to use hardware. 
+      - I am unsure.
+  - name: team
+    label: "Do you have a team?"
+    type: select
+    options: 
+      - Yes, I have a team.
+      - No, I do not have a team. (We can help you form a team!)
+  - name: get_out_of_hum
+    label: "What would you like to get out of HackHer413? (select all that apply)"
+    type: multiselect
+    options:
+      - Learn more about hardware and hardware hacking
+      - Learn more about web programming
+      - Learn more about AI and machine learning
+      - Learn more about iOS/Android app development
+      - Hack with people you know
+      - Hack with people you don't know
+      - Receive swag items from sponsors
+      - Network with sponsors
+  - name: how_did_you_hear
+    label: "How did you hear about HackHer413?"
+    type: multiselect
+    required: True
+    options:
+      - I previously attended HackHer413
+      - From the MLH website
+      - From Google Cloud event
+      - From HackUMass
+      - From another MLH event
+      - Word of mouth
+      - From a teacher
+      - From a friend
+      - Social Media
+      - HackHer413 T-Shirt guerilla marketing
+      - HackHer413 table tents
+      - Hackher413 PVTA Bus Ads
+      - Other
+  - name: other_how_did_you_hear
+    label: "If you selected other above, please describe."
+    type: "textarea"
+    max_chars: 100
+  - name: hardware_suggestion
+    label: "What type of hardware would you want to see at the event?"
+    type: "textarea"
+    max_chars: 500
+  - name: snacks_suggestion
+    label: "What snacks/food would you want to see at the event?"
+    type: "textarea"
+    max_chars: 500
+  - name: prizes_suggestion
+    label: "What prizes would you want to see at the event?"
+    type: "textarea"
+    max_chars: 500
+  - name: song_recommendation
+    label: "Any song recommendations for us to play at the event? Please enter a Spotify link: "
+    type: "textarea"
+    pattern: ^(?!.*[\s])(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{8,}$
+    description: |
+      -   At least 8 characters
+      -   At least one uppercase letter
+      -   At least one lowercase letter
+      -   At least one digit
+      -   Allowed special characters: @$!%*#?&

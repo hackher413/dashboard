@@ -1,0 +1,92 @@
+<div class="page-header" style="position: relative">
+  <h1 class="page-title">Judging Results</h1>
+  <span style='position: absolute; right: 0'>
+    <% if params[:all_table] %>
+        <%= link_to 'Hide Table View', "?project_id=#{params[:project_id]}", class: 'btn btn-secondary' %>
+    <% else %>
+        <%= link_to 'Show Table View', "?project_id=#{params[:project_id]}&all_table=1", class: 'btn btn-secondary' %>
+    <% end %>
+    <%= link_to 'View Project', project_path(@project.id), class: 'btn btn-primary' %>
+  </span>
+
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <h3>Project: <%= @project.title %></h3>
+
+        <% if @scores.nil? or @scores.empty? %>
+            <p>No Scores Submitted For This Project.</p>
+        <% else %>
+            <table class="table table-hover table-striped table-vcenter card-table table-sm">
+                <thead>
+                <tr class="text-center">
+                    <th>Judge</th>
+                    <th>Tag</th>
+                    <th>Score</th>
+                    <% if params[:all_table] and @scores %>
+                        <% @scores.last.custom_scores.keys.each do |field| %>
+                            <th><%= field.titleize %></th>
+                        <% end %>
+                    <% end %>
+                    <th>Action</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                    <% @scores.each do |score| %>
+                        <tr class="text-center">
+                            <td><%= score.user.full_name %></td>
+                            <td><%= score.tag %></td>
+                            <td>
+                                <b><%= score.score %></b>
+                                <span> / <%= @max_score %></span>
+                            </td>
+                            <% if params[:all_table] and score %>
+                                <% score.custom_scores.keys.each do |field| %>
+                                    <% if score.custom_scores[field].length > 4 %>
+                                        <td><%= score.custom_scores[field] %></td>
+                                    <% else %>
+                                        <td><%= score.custom_scores[field] %></td>
+                                    <% end %>
+                                <% end %>
+                            <% end %>
+                            <td>
+                              <div style="text-align: center;">
+                                <%= form_tag destroy_judgement_path, method: :post, class:'form-inline' do%>
+                                  <div class="btn-group" role="group" aria-label="Basic example">
+                                    <a class="btn btn-primary mr-1" data-toggle="modal" data-target="#<%= score.id %>modal" href="<%= judgement_path(score.id) %>">Details</a>
+                                    <%= text_field_tag :judgement_id, "", class: 'form-control', value: score.id, required: true, hidden: true %>
+                                    <%= link_to 'Edit', edit_judgement_path(score.id), class: 'btn btn-warning' %> &nbsp;
+                                    <%= button_tag 'Delete', type: :submit, class: 'btn btn-danger', data: { confirm: 'Are you sure you want to delete this judgement? This can not be undone!' } %>
+                                  </div>
+                                <% end %>
+                              </div>
+                            </td>
+                        </tr>
+                    <% end %>
+                </tbody>
+            </table>
+        <% end %>
+    </div>
+</div>
+
+
+<% @scores.each do |score| %>
+    <div class="modal fade" id="<%= score.id %>modal" data-backdrop="false" tabindex="-1" role="dialog" aria-labelledby="<%= score.id %>modal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"><%= score.user.full_name %><% unless score.tag.blank? %> (<%= score.tag %>)<% end %></h5>
+                </button>
+            </div>
+            <div class="modal-body">
+                <%= render 'score', score: score, max_width: '300px' %>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+            </div>
+        </div>
+    </div>
+<% end %>

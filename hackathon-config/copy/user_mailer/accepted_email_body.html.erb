@@ -1,0 +1,45 @@
+<p style="font-family:sans-serif;font-size:14px;font-weight:normal;margin:0;Margin-bottom:15px;">Hi
+  <%= @user.first_name %>,</p>
+<p style="font-family:sans-serif;font-size:14px;font-weight:normal;margin:0;Margin-bottom:15px;">Congratulations! You have
+  been accepted to participate in <%= HackumassWeb::Application::HACKATHON_NAME %>.</p>
+<p style="font-family:sans-serif;font-size:14px;font-weight:normal;margin:0;Margin-bottom:15px;">Our hackathon will be on February 15th-16th at the Integrative Learning Center (ILC), UMass Amherst.
+ To check in at our event and receive your swag, 
+please make sure you click the link below to <b>RSVP</b> through our Dashboard. You can log in using 
+the same email and password used for your application. While you are there, make sure you click 
+the “Join Discord” button to join the conversations with other bees!
+</p>
+<p style="font-family:sans-serif;font-size:14px;font-weight:normal;margin:0;Margin-bottom:15px;">If you have any questions, please feel free to visit our FAQs section at <a href="<%= HackumassWeb::Application::MAIN_WEBSITE %>"
+    target='_blank'><%= HackumassWeb::Application::MAIN_WEBSITE %></a>.  If you cannot find your answer, please reach out to us through our email <a href="mailto:<%= HackumassWeb::Application::CONTACT_EMAIL %>">
+    <%= HackumassWeb::Application::CONTACT_EMAIL %> </a> or our Discord channel organizer-help! Stay in touch on social media because we have amazing news coming your way! </p>
+<% if @user.event_application.age.to_i < 18 %>
+<p style="font-family:sans-serif;font-size:14px;font-weight:normal;margin:0;Margin-bottom:15px;">In addition, if you are
+  younger than 18 years old, please fill out the attached form and bring it to
+  <%= HackumassWeb::Application::HACKATHON_NAME %> <%= HackumassWeb::Application::HACKATHON_VERSION %> on the day of the
+  event.
+  <a href="http://hackumass.com/legal/HUMVLiabilityWaiverForm.pdf"> Download Form Here!</a></p>
+<% end %>
+
+<table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary"
+  style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;box-sizing:border-box;width:100%;">
+  <tbody>
+    <tr>
+      <td align="left" style="font-family:sans-serif;font-size:14px;vertical-align:top;padding-bottom:15px;">
+        <table border="0" cellpadding="0" cellspacing="0"
+          style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;width:auto;">
+          <tbody>
+            <tr>
+              <td
+                style="font-family:sans-serif;font-size:14px;vertical-align:top;background-color:#ffffff;border-radius:5px;text-align:center;background-color:#3498db;">
+                <a href="<%= HackumassWeb::Application::DASHBOARD_URL %>" target="_blank"
+                  style="text-decoration:underline;background-color:#ffffff;border:solid 1px #3498db;border-radius:5px;box-sizing:border-box;color:#3498db;cursor:pointer;display:inline-block;font-size:14px;font-weight:bold;margin:0;padding:12px 25px;text-decoration:none;text-transform:capitalize;background-color:#926DDE;border-color:#926DDE;color:#ffffff;">RSVP
+                  Now</a> </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p style="font-family:sans-serif;font-size:14px;font-weight:normal;margin:0;Margin-bottom:15px;">Thanks again for
+  registering for our event, and we look forward to seeing you there!
+  <br>- The <%= HackumassWeb::Application::HACKATHON_NAME %> Team</p>

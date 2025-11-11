@@ -1,0 +1,64 @@
+  
+options:
+
+custom_fields:
+  - name: creativity_of_idea
+    label: "How creative is the idea of the hack?"
+    type: range
+    max: 20
+    scores:
+      - points: 7
+        description: "Low: A copy of something already out there (i.e. an existing application)"
+      - points: 14
+        description: "Medium: Similar to existing applications but team has some originality and incorporates new solutions."
+      - points: 20
+        description: "High: Idea is completely novel and/or is a completely new and creative solution to a problem"
+  - name: technically_challenging
+    label: "How technically challenging was the idea relative to the experience levels of team members?"
+    type: range
+    max: 20
+    scores:
+      - points: 7
+        description: "Low: Team members are fully capable and equipped with the background to execute the project idea. The idea was possibly too easy given the experience level."
+      - points: 14
+        description: "Medium: Team members are somewhat experienced in area of project and could've incorporated more challenging aspects; they did not reach out of their comfort zone."
+      - points: 20
+        description: "High: Team members have little to no experience in the tools, technologies, and/or field related to the idea. The idea was overly challenging given the experience level."
+  - name: user_friendly
+    label: "How intuitive is the user experience and overall design of the project?"
+    type: range
+    max: 20
+    scores: 
+      - points: 7
+        description: "Low: The project is metaphorically strung together with duct tape, or has unintuitive design."
+      - points: 14
+        description: "Medium: The project functions but has an imperfect user experience and/or lacks purpose."
+      - points: 20
+        description: "High: The project is intuitive and easy-to-use, with a user of the project easily able to understand how to use it and its purpose."
+  - name: wow_factor
+    label: "How much does the project make you say WOW?"
+    type: range
+    max: 20
+    scores: 
+      - points: 7
+        description: "Low: The project didn't spark any wow factors. Unexciting."
+      - points: 14
+        description: "Medium: The project was cool, but could have been more interesting in some aspects. Most projects fall into this category."
+      - points: 20
+        description: "High: The project was extremely impressive."
+  - name: prize_category_fit
+    label: "How well does this project fit into the prize category? (The prize category is under 'Tag')"
+    type: range
+    max: 10
+    scores: 
+      - points: 3
+        description: "Low: The project doesn't really fit into the prize category. It doesn't fit at all or fits poorly."
+      - points: 7
+        description: "Medium: The project fits moderately well into the prize category."
+      - points: 10
+        description: "High: The project stands out as a front-runner in this prize category."
+  - name: comments
+    label: "Any additional notes or comments can be entered here. Please keep it short! (max one paragraph)"
+    type: textarea
+    max: 0
+    scores: {}

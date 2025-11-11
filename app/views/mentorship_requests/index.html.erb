@@ -1,0 +1,5 @@
+<% if @current_user.is_attendee? %>
+  <%= render 'attendee_view'%>
+<% else %>
+  <%= render 'mentor_view'%>
+<% end %>

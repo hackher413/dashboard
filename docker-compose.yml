@@ -4,7 +4,7 @@ services:
     environment:
       POSTGRES_USER: dashboard
       POSTGRES_PASSWORD: dashboardpass
-      POSTGRES_DB: app_development
+      POSTGRES_DB: dashboard
     volumes:
       - ./db/postgres:/var/lib/postgresql/data
     healthcheck:

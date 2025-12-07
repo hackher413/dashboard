@@ -59,18 +59,31 @@ Rails.application.configure do
 
   config.action_mailer.default_url_options = { :host => "#{HackumassWeb::Application::DASHBOARD_URL}" }
 
-  config.action_mailer.delivery_method = :smtp
+  # config.action_mailer.delivery_method = :smtp
   
-  # SMTP settings for Email Service
-  config.action_mailer.smtp_settings = {
-    :user_name => 'apikey', 
-    :password => ENV['SENDGRID_SMTP_SECRET'], #api key id
-    :address => 'smtp.sendgrid.net',
-    :domain => 'hackher413.com',
-    :port => 587,
-    :authentication => :plain,
-    :enable_starttls_auto => true
-  }
+  # # SMTP settings for Email Service
+  # config.action_mailer.smtp_settings = {
+  #   :user_name => 'apikey', 
+  #   :password => ENV['SENDGRID_SMTP_SECRET'], #api key id
+  #   :address => 'smtp.sendgrid.net',
+  #   :domain => 'hackher413.com',
+  #   :port => 587,
+  #   :authentication => :plain,
+  #   :enable_starttls_auto => true
+  # }
+
+  config.action_mailer.delivery_method = :smtp
+
+  # SMTP settings for AWS SES
+    config.action_mailer.smtp_settings = {
+      address:"email-smtp.us-east-1.amazonaws.com", # replace with your SES region
+      port: 587,
+      user_name: ENV["SES_SMTP_USERNAME"],
+      password: ENV["SES_SMTP_PASSWORD"],
+      authentication: :login,
+      enable_starttls_auto: true,
+      domain: 'hackumass.com'
+    }
 
   config.action_mailer.perform_deliveries = true
 

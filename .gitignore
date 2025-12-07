@@ -35,3 +35,4 @@ public/assets/.sprocket*
 .gitmodules
 
 .cache/
+.env

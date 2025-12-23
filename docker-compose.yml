@@ -27,8 +27,10 @@ services:
     volumes:
       - ./:/usr/src/app
       - bundle_gems:/usr/src/app/vendor/bundle
+    env_file:
+      - .env.production
     environment:
-      RAILS_ENV: development
+      RAILS_ENV: production
       # Optional, Rails will typically pick up config/database.yml:
       # DATABASE_URL: postgres://dashboard:dashboardpass@postgres:5432/app_development
       # RAILS_LOG_TO_STDOUT: "1"

@@ -15,12 +15,23 @@ fi
 mkdir -p db/postgres
 if [ ! -f "db/postgres/.built" ]; then
   echo "Bootstrapping database..."
-  bundle exec rake db:create
-  bundle exec rake db:migrate
-  bundle exec rake db:setup
-  # This task may not exist in all envs; don't crash if missing
+  bundle exec rails db:create
+
+  if [ "${RAILS_ENV:-development}" = "production" ]; then
+    # Production-safe: no schema:load, no seeds
+    bundle exec rails db:migrate
+  else
+    # Dev/local: OK to load schema + seed
+    bundle exec rails db:migrate
+    bundle exec rails db:setup
+  fi
+
+  # Optional task
   bundle exec rake feature_flags:load_flags || true
   touch db/postgres/.built
+else
+  # Always run migrations on boot (safe, and ensures deploys apply new migrations)
+  bundle exec rails db:migrate
 fi
 
 # Start Rails

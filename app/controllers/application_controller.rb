@@ -58,7 +58,7 @@ class ApplicationController < ActionController::Base
 
   def check_feature_flag?(feature_flag_name)
     feature_flag = FeatureFlag.find_by(name: feature_flag_name)
-    feature_flag&.value || false
+    feature_flag.nil? ? false : feature_flag.value
   end
   helper_method :check_feature_flag?
 

@@ -3,7 +3,7 @@ version: 2026 # Could also be a roman numeral or other number, will be concatena
 main_website: https://www.hackher413.com/
 dashboard_url: https://dashboard.hackher413.com
 logos:
-    primary_path: https://www.hackher413.com/assets/images/HackHer2026Logo.png
+    primary_path: https://www.hackher413.com/static/HackHer2026Logo.png
     nav_path: HackHer2026.png
     favicon_url: bee.png
 emails:

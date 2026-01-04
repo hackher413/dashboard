@@ -104,13 +104,6 @@ custom_fields:
       - Mobile development
       - Hardware engineering
       - None, I am interested in something else
-  - name: vaccination_status
-    label: "Are you fully vaccinated for Covid-19?"
-    type: select
-    required: True
-    options:
-      - Yes, I am fully vaccinated with my primary series.
-      - No, I am not vaccinated with my primary series.
   - name: linkedin_url
     label: "LinkedIn URL"
     validate_regex: '\A(https:\/\/)?(www.)?linkedin.com\/in\/\S+\z'

@@ -130,12 +130,12 @@ custom_fields:
       - 5 or more
     hidden: True
   - name: been_to_hackumass
-    label: "Have you previously attended HackHer413?"
+    label: "Have you previously attended Hack(H)er413?"
     type: boolean
     required: True
     toggle_field: previous_hackumass_comments
   - name: previous_hackumass_comments
-    label: "Since you've attended HackHer413 before, is there anything new or different you'd like to see at HackHer413 2024?"
+    label: "Since you've attended Hack(H)er413 before, is there anything new or different you'd like to see at Hack(H)er413 2026?"
     type: textarea
     max_chars: 500
     hidden: True
@@ -184,7 +184,7 @@ custom_fields:
       - Yes, I have a team.
       - No, I do not have a team. (We can help you form a team!)
   - name: get_out_of_hum
-    label: "What would you like to get out of HackHer413? (select all that apply)"
+    label: "What would you like to get out of Hack(H)er413? (select all that apply)"
     type: multiselect
     options:
       - Learn more about hardware and hardware hacking
@@ -196,7 +196,7 @@ custom_fields:
       - Receive swag items from sponsors
       - Network with sponsors
   - name: how_did_you_hear
-    label: "How did you hear about HackHer413?"
+    label: "How did you hear about Hack(H)er413?"
     type: multiselect
     required: True
     options:

@@ -14,12 +14,12 @@ slack:
     enabled: false
     # subdomain: hackher413-2024
 discord:
-  enabled: false
-  # server_id: 1309430465450606592
-  # teamforming_channel_id: 1326303382050443354
-  # ask_mentor_channel_id: 1326306268410941532
-  # general_channel_id: 1309430467203698741
-  # invite_url: https://discord.gg/kYP6JVtz
+  enabled: true
+  server_id: 1426212276733612034
+  teamforming_channel_id: 1471247208769785877
+  ask_mentor_channel_id: 1471222217949057034
+  general_channel_id: 1473029434171850946
+  invite_url: https://discord.gg/gBWmJVqqfP
 applications:
     mode: "open"
     # options: open, waitlist, or closed. defaults to closed.

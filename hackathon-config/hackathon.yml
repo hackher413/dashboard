@@ -15,10 +15,10 @@ slack:
     # subdomain: hackher413-2024
 discord:
   enabled: true
-  server_id: 1426212276733612034
-  teamforming_channel_id: 1471247208769785877
-  ask_mentor_channel_id: 1471222217949057034
-  general_channel_id: 1473029434171850946
+  server_id: "1426212276733612034"
+  teamforming_channel_id: "1471247208769785877"
+  ask_mentor_channel_id: "1471222217949057034"
+  general_channel_id: "1473029434171850946"
   invite_url: https://discord.gg/gBWmJVqqfP
 applications:
     mode: "open"
